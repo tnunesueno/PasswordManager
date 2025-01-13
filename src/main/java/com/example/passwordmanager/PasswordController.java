@@ -3,7 +3,7 @@ package com.example.passwordmanager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class PasswordController {
     @FXML
     private Label welcomeText;
 
