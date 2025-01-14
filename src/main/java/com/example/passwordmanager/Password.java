@@ -11,7 +11,7 @@ public class Password {
     private String username;
     private LocalDate dateCreated;
     private LocalDate dateChanged;
-    private String serviceLink = null;
+   // private String serviceLink = null;
     private Boolean hidden = true;
 
     public Password(String password, String service, String username, LocalDate dateCreated, LocalDate dateChanged, String serviceLink) {
@@ -20,7 +20,7 @@ public class Password {
         this.username = username;
         this.dateCreated = dateCreated;
         this.dateChanged = dateChanged;
-        this.serviceLink = serviceLink;
+       // this.serviceLink = serviceLink;
     }
 
 
@@ -45,9 +45,9 @@ public class Password {
         return dateChanged;
     }
 
-    public String getServiceLink() {
-        return serviceLink;
-    }
+  //  public String getServiceLink() {
+    //    return serviceLink;
+    //}
 
     //SETTERS
 
@@ -71,9 +71,9 @@ public class Password {
         this.dateChanged = dateChanged;
     }
 
-    public void setServiceLink(String serviceLink) {
-        this.serviceLink = serviceLink;
-    }
+    //public void setServiceLink(String serviceLink) {
+     //   this.serviceLink = serviceLink;
+   // }
 
     void changePassword(String newPassword){
        this.setPassword(newPassword);
