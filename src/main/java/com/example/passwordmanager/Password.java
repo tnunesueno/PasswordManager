@@ -3,7 +3,7 @@ package com.example.passwordmanager;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
+import java.util.Random;
 
 public class Password {
     private String password;
@@ -11,6 +11,7 @@ public class Password {
     private String username;
     private LocalDate dateCreated;
     private LocalDate dateChanged;
+
    // private String serviceLink = null;
     private Boolean hidden = true;
 
@@ -86,7 +87,14 @@ public class Password {
     }
 
     void generatePassword(){
-        String newPassword;
+        Random random = new Random();
+        int length = random.nextInt(10,20);
 
+        for(int i=0; i<=length; i++){
+           StringBuilder sb = new StringBuilder();
+           sb.append(random.nextInt());
+           String newPassword = new String(sb);
+           System.out.println(newPassword);
+        }
     }
 }
