@@ -86,15 +86,5 @@ public class Password {
         LocalDate parsedDate = LocalDate.parse(dateChangedText, formatter);
     }
 
-    void generatePassword(){
-        Random random = new Random();
-        int length = random.nextInt(10,20);
 
-        for(int i=0; i<=length; i++){
-           StringBuilder sb = new StringBuilder();
-           sb.append(random.nextInt());
-           String newPassword = new String(sb);
-           System.out.println(newPassword);
-        }
-    }
 }
