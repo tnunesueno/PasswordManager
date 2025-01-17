@@ -1,18 +1,19 @@
 package com.example.passwordmanager;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 public class PasswordController {
     @FXML
@@ -33,12 +34,14 @@ public class PasswordController {
     VBox vbox;
     @FXML
     Button saveButton;
+
+    Boolean shown = false;
     protected void initialize() {
 
     }
 
     @FXML
-    public void addPassword(){
+    public void addPassword() throws Exception {
       // only allow user to add if both password and service are filled
       if ((serviceInputField.getText()!=null)&&(passwordInputField.getText()!=null)){
 
@@ -49,14 +52,31 @@ public class PasswordController {
         Text newServiceText = new Text(newService);
         PasswordField newPasswordField =  new PasswordField();
         newPasswordField.setText(newPassword);
-        Button newShow = new Button("Show");
+        CheckBox newShow = new CheckBox("Show");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+        TextField passwordShown = new TextField(newPassword);
+          passwordShown.setManaged(false);
+          passwordShown.setVisible(false);
+          passwordShown.managedProperty().bind(newShow.selectedProperty());
+          passwordShown.visibleProperty().bind(newShow.selectedProperty());
+
+
+          newPasswordField.managedProperty().bind(newShow.selectedProperty().not());
+          newPasswordField.visibleProperty().bind(newShow.selectedProperty().not());
+          passwordShown.textProperty().bindBidirectional(newPasswordField.textProperty());
+
+
+          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM  dd yyyy");
         String dateChangedText = addedPassword.getDateCreated().format(formatter);
         //LocalDate parsedDate = LocalDate.parse(dateChangedText, formatter);
 
         Text newDateText = new Text(dateChangedText);
         HBox newHBox = new HBox(newServiceText,newPasswordField,newShow,newDateText);
+
+          if(passwordShown.visibleProperty().equals(true)){
+            newHBox.getChildren().add(passwordShown);
+          }
+
         newHBox.setPrefWidth(vbox.getWidth());
         newHBox.setSpacing(10);
         vbox.getChildren().add(newHBox);
@@ -66,6 +86,8 @@ public class PasswordController {
       } else{
 
       }
+
+
     }
 
     @FXML
