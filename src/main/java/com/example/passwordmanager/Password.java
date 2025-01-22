@@ -1,16 +1,20 @@
 package com.example.passwordmanager;
 
+import javax.imageio.ImageIO;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-public class Password {
+public class Password implements Serializable {
     private String password;
     private String service;
     private String username;
     private LocalDate dateCreated;
     private LocalDate dateChanged;
+    public static  ArrayList<Password> allPasswords = new ArrayList<Password>();
 
    // private String serviceLink = null;
     private Boolean hidden = true;
@@ -46,9 +50,14 @@ public class Password {
         return dateChanged;
     }
 
-  //  public String getServiceLink() {
-    //    return serviceLink;
-    //}
+    public static ArrayList<Password> getAllPasswords() {
+        return allPasswords;
+    }
+
+    public Boolean getHidden() {
+        return hidden;
+    }
+
 
     //SETTERS
 
@@ -76,15 +85,44 @@ public class Password {
      //   this.serviceLink = serviceLink;
    // }
 
-    void changePassword(String newPassword){
-       this.setPassword(newPassword);
 
+    @Serial
+    private void writeObject(ObjectOutputStream s) throws IOException {
+        // write NON-transient fields
+        s.defaultWriteObject();
+        // write transient fields
+        }
+
+    @Serial
+    private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
+        // read NON-transient fields
+        s.defaultReadObject();
+        // read transient fields
+    }
+
+    static void saveData() throws Exception {
+        FileOutputStream fileOut = new FileOutputStream("SavedAlbumsFile");
+        ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        objectOut.writeObject(allPasswords);
+        objectOut.close();
+        fileOut.close();
+    }
+
+    static void restoreData() throws Exception {
+        FileInputStream fileIn = new FileInputStream("SavedAlbumsFile");
+        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+        allPasswords = (ArrayList<Password>)objectIn.readObject();
+        objectIn.close();
+        fileIn.close();
+    }
+
+   public void changePassword(String newPassword){
+        this.setPassword(newPassword);
         LocalDate date = LocalDate.now();
         setDateChanged(date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
         String dateChangedText = dateChanged.format(formatter);
         LocalDate parsedDate = LocalDate.parse(dateChangedText, formatter);
     }
-
 
 }

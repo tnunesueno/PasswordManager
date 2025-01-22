@@ -25,4 +25,8 @@ public class HelloApplication extends Application {
         launch();
     }
 
+    public void stop() throws Exception {
+        Password.saveData();
+    }
+
 }
