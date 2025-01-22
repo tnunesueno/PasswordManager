@@ -121,7 +121,7 @@ public class PasswordController {
     void deletePasswordFromArray(Password deletedPassword){
         Password.allPasswords.remove(deletedPassword);
     }
-
+// make hbox spacing prettier
     HBox addHboxForPassword(Password hboxPw){
         CheckBox newShow = new CheckBox("Show");
         Button delete = new Button("Delete");
