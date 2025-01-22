@@ -38,7 +38,6 @@ public class PasswordController {
     @FXML
     Text warningText;
 
-    Boolean shown = false;
     public void initialize() {
 
         if (Password.getAllPasswords().isEmpty()) {
@@ -60,7 +59,9 @@ public class PasswordController {
             } else {
                 System.out.println("SAVED OBJECTS RESTORED");
                 // here is where I add the new hboxes
-
+                for (Password i: Password.getAllPasswords()) {
+                   addHboxForPassword(i);
+                }
             }
         }
     }
@@ -76,55 +77,26 @@ public class PasswordController {
 
       Password addedPassword = new Password(newPassword, newService,null,LocalDate.now(), LocalDate.now(),null);
       Password.allPasswords.add(addedPassword);
-        Text newServiceText = new Text(newService);
-        PasswordField newPasswordField =  new PasswordField();
-        newPasswordField.setText(newPassword);
-
-
-
-        TextField passwordShown = new TextField(newPassword);
-          passwordShown.setManaged(false);
-          passwordShown.setVisible(false);
-          passwordShown.setEditable(true);
-
-          // to edit the thing
-          passwordShown.setOnAction( e -> {
-           addedPassword.changePassword(addedPassword.getPassword());
-          });
-
-          passwordShown.managedProperty().bind(newShow.selectedProperty());
-          passwordShown.visibleProperty().bind(newShow.selectedProperty());
-
-          newPasswordField.managedProperty().bind(newShow.selectedProperty().not());
-          newPasswordField.visibleProperty().bind(newShow.selectedProperty().not());
-          passwordShown.textProperty().bindBidirectional(newPasswordField.textProperty());
-
-          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM  dd yyyy");
-          String dateChangedText = addedPassword.getDateCreated().format(formatter);
-
-        Text newDateText = new Text(dateChangedText);
-
-        addHboxForPassword(addedPassword);
-
-
+      addHboxForPassword(addedPassword);
 
         serviceInputField.clear();
         passwordInputField.clear();
-
-        // how to get password from fields to delete
 
       } else if (serviceInputField.getText().isEmpty()) {
           warningText.setVisible(true);
           warningText.setText("Please indicate a service");
           System.out.println("Please indicate a service");
+          serviceInputField.requestFocus();
       } else if ((passwordInputField.getText().length()<=6)&&(!passwordInputField.getText().isEmpty())){
           warningText.setVisible(true);
           warningText.setText("Passwords must be at least 7 characters");
           System.out.println("Passwords must be at least 7 characters");
+          passwordInputField.requestFocus();
       } else if(passwordInputField.getText().isEmpty()){
           warningText.setVisible(true);
-          warningText.setText("Please indicate a password");
-          System.out.println("Please indicate a password");
+          warningText.setText("Please add a password");
+          System.out.println("Please add a password");
+          passwordInputField.requestFocus();
       }
 
     }
@@ -132,7 +104,7 @@ public class PasswordController {
     @FXML
     void generatePassword(){
         Random random = new Random();
-        int length = random.nextInt(10,15);
+        int length = random.nextInt(7,10);
         StringBuilder sb = new StringBuilder();
 
         for(int i=0; i<=length; i++){
@@ -153,10 +125,34 @@ public class PasswordController {
     HBox addHboxForPassword(Password hboxPw){
         CheckBox newShow = new CheckBox("Show");
         Button delete = new Button("Delete");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM  dd yyyy");
-        HBox newHBox = new HBox(hboxPw.getService(),hboxPw.getPassword(), hboxPw.getHidden(), newShow, hboxPw.getDateCreated().format(formatter), delete);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM dd yyyy");
+        Text newDateText = new Text(hboxPw.getDateCreated().format(formatter));
+
+        Text newServiceText = new Text(hboxPw.getService());
+        PasswordField newPasswordField =  new PasswordField();
+        newPasswordField.setText(hboxPw.getPassword());
+
+        TextField passwordShown = new TextField(hboxPw.getPassword());
+        passwordShown.setManaged(false);
+        passwordShown.setVisible(false);
+        passwordShown.setEditable(true);
+
+        HBox newHBox = new HBox(newServiceText,newPasswordField, passwordShown, newShow,newDateText, delete);
         newHBox.setPrefWidth(vbox.getWidth());
         newHBox.setSpacing(20);
+
+        // to edit the thing
+        passwordShown.setOnAction( e -> {
+            hboxPw.changePassword(hboxPw.getPassword());
+        });
+
+        passwordShown.managedProperty().bind(newShow.selectedProperty());
+        passwordShown.visibleProperty().bind(newShow.selectedProperty());
+
+        newPasswordField.managedProperty().bind(newShow.selectedProperty().not());
+        newPasswordField.visibleProperty().bind(newShow.selectedProperty().not());
+        passwordShown.textProperty().bindBidirectional(newPasswordField.textProperty());
 
         delete.setOnAction(e -> {
             deletePasswordFromArray(hboxPw);
