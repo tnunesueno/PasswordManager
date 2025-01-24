@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
@@ -38,7 +39,7 @@ public class PasswordController {
     @FXML
     Text warningText;
 
-    public void initialize() {
+    public void initialize() throws Exception {
 
         if (Password.getAllPasswords().isEmpty()) {
             try {
@@ -60,9 +61,25 @@ public class PasswordController {
                 System.out.println("SAVED OBJECTS RESTORED");
                 // here is where I add the new hboxes
                 for (Password i: Password.getAllPasswords()) {
-                   addHboxForPassword(i);
+                    addHboxForPassword(i);
                 }
             }
+            /*Password masterPw = new Password(null,null,null,null,null,null);
+            Password.allPasswords.add(masterPw);
+            TextInputDialog signIn = new TextInputDialog();
+            signIn.setTitle("Sign in");
+            signIn.setContentText("Master password:");
+            signIn.setWidth(400);
+            signIn.setHeight(300);
+            signIn.show();
+
+            if (masterPw.getPassword().equals(null)){
+                signIn.setHeaderText("Set master password");
+                masterPw.setPassword(signIn.getEditor().getText());
+            }
+            if (signIn.getEditor().getText().equals(masterPw.getPassword())){
+                signIn.close();
+            }*/
         }
     }
 
@@ -76,6 +93,7 @@ public class PasswordController {
       if ((!newService.isEmpty())&&(newPassword.length()>6)){
 
       Password addedPassword = new Password(newPassword, newService,null,LocalDate.now(), LocalDate.now(),null);
+      addedPassword.setDateCreated(LocalDate.now());
       Password.allPasswords.add(addedPassword);
       addHboxForPassword(addedPassword);
 
@@ -122,7 +140,7 @@ public class PasswordController {
         Password.allPasswords.remove(deletedPassword);
     }
 // make hbox spacing prettier
-    HBox addHboxForPassword(Password hboxPw){
+    HBox addHboxForPassword(Password hboxPw) throws Exception {
         CheckBox newShow = new CheckBox("Show");
         Button delete = new Button("Delete");
 
