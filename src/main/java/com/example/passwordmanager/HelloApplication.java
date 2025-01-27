@@ -3,6 +3,11 @@ package com.example.passwordmanager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +23,16 @@ public class HelloApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+
+        Alert signIn = new Alert(Alert.AlertType.WARNING);
+        signIn.setTitle("Sign in");
+        signIn.setHeaderText("Master password: ");
+        signIn.setGraphic(null);
+        signIn.getDialogPane().setContent(new PasswordField());
+        signIn.showAndWait();
+       // signIn.getButtonTypes()
+
+
     }
 
     public static void main(String[] args) {

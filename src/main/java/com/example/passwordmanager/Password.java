@@ -12,14 +12,14 @@ public class Password implements Serializable {
     private String password;
     private String service;
     private String username;
-    private LocalDate dateCreated;
-    private LocalDate dateChanged;
+    private String dateCreated;
+    private String dateChanged;
     public static  ArrayList<Password> allPasswords = new ArrayList<Password>();
 
    // private String serviceLink = null;
     private Boolean hidden = true;
 
-    public Password(String password, String service, String username, LocalDate dateCreated, LocalDate dateChanged, String serviceLink) {
+    public Password(String password, String service, String username, String dateCreated, String dateChanged, String serviceLink) {
         this.password = password;
         this.service = service;
         this.username = username;
@@ -42,11 +42,11 @@ public class Password implements Serializable {
         return username;
     }
 
-    public LocalDate getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public LocalDate getDateChanged() {
+    public String getDateChanged() {
         return dateChanged;
     }
 
@@ -73,11 +73,11 @@ public class Password implements Serializable {
         this.username = username;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public void setDateChanged(LocalDate dateChanged) {
+    public void setDateChanged(String dateChanged) {
         this.dateChanged = dateChanged;
     }
 
@@ -119,9 +119,9 @@ public class Password implements Serializable {
    public void changePassword(String newPassword){
         this.setPassword(newPassword);
         LocalDate date = LocalDate.now();
-        setDateChanged(date);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
-        String dateChangedText = dateChanged.format(formatter);
+        String dateChangedText = date.format(formatter);
+       setDateChanged(dateChangedText);
         LocalDate parsedDate = LocalDate.parse(dateChangedText, formatter);
     }
 

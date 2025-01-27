@@ -40,6 +40,16 @@ public class PasswordController {
     Text warningText;
 
     public void initialize() throws Exception {
+        Password masterPw = new Password("",null,null,null,null,null);
+        //Password.allPasswords.add(masterPw);
+
+        /*if (masterPw.getPassword().isEmpty()){
+            signIn.setHeaderText("Set master password");
+            masterPw.setPassword(signIn.getEditor().getText());
+        }
+        if (signIn.getEditor().getText().equals(masterPw.getPassword())){
+            signIn.close();
+        }*/
 
         if (Password.getAllPasswords().isEmpty()) {
             try {
@@ -64,22 +74,6 @@ public class PasswordController {
                     addHboxForPassword(i);
                 }
             }
-            /*Password masterPw = new Password(null,null,null,null,null,null);
-            Password.allPasswords.add(masterPw);
-            TextInputDialog signIn = new TextInputDialog();
-            signIn.setTitle("Sign in");
-            signIn.setContentText("Master password:");
-            signIn.setWidth(400);
-            signIn.setHeight(300);
-            signIn.show();
-
-            if (masterPw.getPassword().equals(null)){
-                signIn.setHeaderText("Set master password");
-                masterPw.setPassword(signIn.getEditor().getText());
-            }
-            if (signIn.getEditor().getText().equals(masterPw.getPassword())){
-                signIn.close();
-            }*/
         }
     }
 
@@ -90,10 +84,13 @@ public class PasswordController {
       String newService = serviceInputField.getText();
       String newPassword = passwordInputField.getText();
 
+      LocalDate date = LocalDate.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+      String dateChangedText = date.format(formatter);
+
       if ((!newService.isEmpty())&&(newPassword.length()>6)){
 
-      Password addedPassword = new Password(newPassword, newService,null,LocalDate.now(), LocalDate.now(),null);
-      addedPassword.setDateCreated(LocalDate.now());
+      Password addedPassword = new Password(newPassword, newService,null, dateChangedText, dateChangedText,null);
       Password.allPasswords.add(addedPassword);
       addHboxForPassword(addedPassword);
 
@@ -143,9 +140,11 @@ public class PasswordController {
     HBox addHboxForPassword(Password hboxPw) throws Exception {
         CheckBox newShow = new CheckBox("Show");
         Button delete = new Button("Delete");
+       // LocalDate dateCreated = LocalDate.now();
+       // hboxPw.setDateCreated(dateCreated);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM dd yyyy");
-        Text newDateText = new Text(hboxPw.getDateCreated().format(formatter));
+        Text newDateText = new Text(hboxPw.getDateCreated());
 
         Text newServiceText = new Text(hboxPw.getService());
         PasswordField newPasswordField =  new PasswordField();
